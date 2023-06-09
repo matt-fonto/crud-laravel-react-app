@@ -2,6 +2,8 @@
     "private": true,
     "type": "module",
     "scripts": {
+        "start:fe": "cd react && npm run dev",
+        "start:be": "php artisan serve",
         "dev": "vite",
         "build": "vite build"
     },
