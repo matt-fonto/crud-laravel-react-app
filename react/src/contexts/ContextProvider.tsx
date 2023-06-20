@@ -22,12 +22,9 @@ export const ContextProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
-    const [user, setUser] = useState<any>({
-        name: "John Doe",
-    });
+    const [user, setUser] = useState<any>({});
     const [token, _setToken] = useState<string | null>(
-        // localStorage.getItem("ACCESS_TOKEN")
-        null
+        localStorage.getItem("ACCESS_TOKEN")
     );
 
     // function to update the token state variable and save it in the local storage

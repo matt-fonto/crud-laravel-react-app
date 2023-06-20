@@ -47,6 +47,7 @@ input:focus {
     border-color: #5b08a7;
 }
 
+
 .btn,
 .btn-add,
 .btn-edit,
@@ -63,6 +64,46 @@ input:focus {
     transition: all 0.3 ease;
     cursor: pointer;
 }
+
+.btn-prev,
+.btn-next {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+    border: none;
+    background-color: transparent;
+    color: #333;
+    transition: all 0.3s ease-out;
+    font-size: 18px;
+    box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.btn-prev:hover,
+.btn-next:hover {
+    color: #000;
+    box-shadow: 0 6px 14px 0 rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+}
+
+.btn-prev:active,
+.btn-next:active {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transform: scale(0.98);
+}
+
+.container-pagination{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+
 
 .btn-block {
     width: 100%;
@@ -187,6 +228,12 @@ table > tbody > tr > td {
 .login-signup-form .form .message a {
     color: #5b08a7;
     text-decoration: none;
+}
+
+.error{
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
 }
 
 /* Login/Signup form */

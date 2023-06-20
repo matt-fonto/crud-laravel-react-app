@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import axiosClient from "../axios-client";
 import { useStateContext } from "../contexts/ContextProvider";
@@ -9,6 +9,13 @@ const Signup = () => {
     const passwordRef: React.RefObject<HTMLInputElement> = useRef(null);
     const passwordConfirmationRef: React.RefObject<HTMLInputElement> =
         useRef(null);
+
+    // error states
+    const [nameError, setNameError] = useState<string>("");
+    const [emailError, setEmailError] = useState<string>("");
+    const [passwordError, setPasswordError] = useState<string>("");
+    const [passwordConfirmationError, setPasswordConfirmationError] =
+        useState<string>("");
 
     const { setUser, setToken } = useStateContext();
 
@@ -30,8 +37,21 @@ const Signup = () => {
             const data = response.data;
             setUser(data.user);
             setToken(data.token);
-        } catch (error) {
-            console.error(error);
+        } catch (error: any) {
+            if (error.response) {
+                const { errors } = error.response.data;
+
+                // Update the errors in the state
+                if (errors.name) setNameError(errors.name[0]);
+                if (errors.email) setEmailError(errors.email[0]);
+                if (errors.password) setPasswordError(errors.password[0]);
+                if (errors.password_confirmation)
+                    setPasswordConfirmationError(
+                        errors.password_confirmation[0]
+                    );
+            } else {
+                console.log(error);
+            }
         }
     };
 
@@ -40,18 +60,28 @@ const Signup = () => {
             <div className="form">
                 <form action="" onSubmit={onSubmit}>
                     <h1 className="title">Signup for free</h1>
+                    {nameError && <p className="error">{nameError}</p>}
                     <input ref={nameRef} type="text" placeholder="Full Name" />
+
+                    {emailError && <p className="error">{emailError}</p>}
                     <input ref={emailRef} type="email" placeholder="Email" />
+
+                    {passwordError && <p className="error">{passwordError}</p>}
                     <input
                         ref={passwordRef}
                         type="password"
                         placeholder="Password"
                     />
+
+                    {passwordConfirmationError && (
+                        <p className="error">{passwordConfirmationError}</p>
+                    )}
                     <input
                         ref={passwordConfirmationRef}
                         type="password"
                         placeholder="Password Confirmation"
                     />
+
                     <button className="btn btn-block">Signup</button>
                     <p className="message">
                         Already Registered? <Link to="/login">Sign in</Link>

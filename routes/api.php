@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,14 +16,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// user needs to be authenticated to access these routes
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post("/logout", [AuthController::class, 'logout']);
+    // this route will return the user that is currently logged in
+    Route::get("/user", function (Request $request) {
+        return $request->user();
+    });
+
+    Route::apiResource("/users", UserController::class);
 });
 
+// AuthController: a controller that handles authentication
 // When we hit the /signup route with a post method, we should get the signup method from the AuthController 
 Route::post("/signup", [AuthController::class, 'signup']);
 Route::post("/login", [AuthController::class, 'login']);
-Route::post("/logout", [AuthController::class, 'logout']);
-
-// 1:18:24
-// 1:24:36

@@ -66,11 +66,12 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        /* @var User $user */
-        // get the authenticated user
         $user = $request->user();
 
-        // delete the token that we used for authentication
+        if ($user === null) {
+            return response('No authenticated user', 401);
+        }
+
         $user->currentAccessToken()->delete();
 
         return response('Logged out successfully', 200);

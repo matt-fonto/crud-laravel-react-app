@@ -1,41 +1,44 @@
 import { Link, Navigate, Outlet } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
 import axiosClient from "../axios-client";
+import { useEffect } from "react";
 
 const DefaultLayout = () => {
     // calling the context
-    const { user, token } = useStateContext();
+    const { user, token, setUser, setToken } = useStateContext();
 
     // Everything that is inside the default layout will be rendered only if the user is logged in
     if (!token) return <Navigate to="/login" />;
 
+    // get information about the user
+    useEffect(() => {
+        // Call the fetchUser function
+        fetchUser();
+    }, []);
+
+    const fetchUser = async () => {
+        try {
+            const response = await axiosClient.get("/user");
+            const { data } = response;
+            setUser(data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const onLogout = async (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
 
-        // Retrieve the token from the local storage
-        const token = localStorage.getItem("token");
+        logout();
+    };
 
-        // Define config to add the token to the headers
-        const config = {
-            // We add the token to the headers
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        };
-
+    const logout = async () => {
         try {
-            // We send a post request to the server, to the logout route
-            // axiosClient.post("/route", payload, config)
-            const response = await axiosClient.post("/logout", {}, config);
-
-            // If the response is successful, we remove the token from the local storage
-            if (response.status === 200) {
-                localStorage.removeItem("token");
-            }
-
-            return response;
+            await axiosClient.post("/logout");
+            setUser({});
+            setToken(null);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     };
 
